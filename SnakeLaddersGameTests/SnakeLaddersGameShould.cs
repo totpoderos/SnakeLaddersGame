@@ -12,6 +12,16 @@ namespace SnakeLaddersGameTests
 
             Assert.Equal(new Position(1), game.TokenPosition);
         }
+
+        [Fact]
+        public void MoveTokenThreeSpacesToPositionFour()
+        {
+            var game = new Game();
+
+            game.Move(3);
+            
+            Assert.Equal(new Position(4), game.TokenPosition);
+        }
     }
 
     public class Position
@@ -41,6 +51,10 @@ namespace SnakeLaddersGameTests
             return _position;
         }
 
+        public Position Increment(int spaces)
+        {
+            return new Position(_position + spaces);
+        }
     }
 
     public class Game
@@ -53,5 +67,10 @@ namespace SnakeLaddersGameTests
         }
 
         public Position TokenPosition => _position;
+
+        public void Move(int spaces)
+        {
+            _position = _position.Increment(spaces);
+        }
     }
 }
