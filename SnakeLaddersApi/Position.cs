@@ -27,6 +27,11 @@ namespace SnakeLaddersApi
             return _position;
         }
 
+        public override string ToString()
+        {
+            return $"{_position}";
+        }
+
         public Position Increment(int spaces, int totalSpaces)
         {
             return _position + spaces > totalSpaces ? this : 
