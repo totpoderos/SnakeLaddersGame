@@ -45,6 +45,18 @@ namespace SnakeLaddersGameTests
             Assert.Equal(new Position(100), game.TokenPosition);
             Assert.True(game.IsWon);
         }
+        
+        [Fact]
+        public void NotWinTheGameWhenLastMoveGoesBeyondFinalPosition()
+        {
+            var game = new Game();
+            game.Move(96);
+            
+            game.Move(4);
+            
+            Assert.Equal(new Position(97), game.TokenPosition);
+            Assert.False(game.IsWon);
+        }
     }
 
     public class Position
@@ -74,14 +86,16 @@ namespace SnakeLaddersGameTests
             return _position;
         }
 
-        public Position Increment(int spaces)
+        public Position Increment(int spaces, int totalSpaces)
         {
-            return new Position(_position + spaces);
+            return _position + spaces > totalSpaces ? this : 
+                new Position(_position + spaces);
         }
     }
 
     public class Game
     {
+        private const int TotalSpaces = 100;
         private Position _position;
 
         public Game()
@@ -91,11 +105,10 @@ namespace SnakeLaddersGameTests
 
         public void Move(int spaces)
         {
-            _position = _position.Increment(spaces);
+            _position = _position.Increment(spaces, TotalSpaces);
             
         }
         public Position TokenPosition => _position;
         public bool IsWon => _position.Equals(new Position(100));
-
     }
 }
