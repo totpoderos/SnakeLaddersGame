@@ -91,6 +91,23 @@ namespace SnakeLaddersGameTests
             
             Assert.Equal("You win the game!", console.MessagePrinted);
         }
+
+        [Fact]
+        public void PlayerHasNotWonTheGame()
+        {
+            var console = new InputOutputConsoleTestDouble();
+            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
+            console.ReadWillReturn("PlaceToken");
+            gameController.ProcessCommand();
+            
+            console.ReadWillReturn("Move 2");
+            gameController.ProcessCommand();
+            
+            console.ReadWillReturn("Status");
+            gameController.ProcessCommand();
+            
+            Assert.Equal("You didn't win the game", console.MessagePrinted);
+        }
     }
 
     public class InputOutputConsoleTestDouble : InputOutputConsole
@@ -165,6 +182,8 @@ namespace SnakeLaddersGameTests
             {
                 if (_game.IsWon)
                     _inputOutputConsole.Print("You win the game!");
+                else 
+                    _inputOutputConsole.Print("You didn't win the game");
             }
         }
     }
