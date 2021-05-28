@@ -42,8 +42,8 @@ namespace SnakeLaddersGameTests
             
             gameController.ProcessCommand();
             
-                Assert.Equal("Position: 1", console.MessagePrinted);
-           }
+            Assert.Equal("Position: 1", console.MessagePrinted);
+        }
 
         [Fact]
         public void ProcessMoveCommand()
@@ -58,8 +58,22 @@ namespace SnakeLaddersGameTests
             
             gameController.ProcessCommand();
             
-                Assert.Equal("Position: 4", console.MessagePrinted);
-            }
+            Assert.Equal("Position: 4", console.MessagePrinted);
+        }
+
+        [Fact]
+        public void ProcessRollDiceCommand()
+        {
+            var console = new InputOutputConsoleTestDouble();
+            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
+            console.ReadWillReturn("PlaceToken");
+            gameController.ProcessCommand();
+            
+            console.ReadWillReturn("RollDice");
+            gameController.ProcessCommand();
+            
+            Assert.Contains("You get a: ", console.MessagePrinted);
+        }
     }
 
     public class InputOutputConsoleTestDouble : InputOutputConsole
@@ -121,6 +135,13 @@ namespace SnakeLaddersGameTests
             {
                 var spaces = command.Replace("move", "").Trim();
                 _game.Move(Int32.Parse(spaces));
+            }
+
+            if (command == "rolldice")
+            {
+                int spaces = _game.RollDice();
+                _game.Move(spaces);
+                _inputOutputConsole.Print($"You get a: {spaces}");
             }
         }
     }

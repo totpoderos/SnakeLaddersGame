@@ -15,7 +15,8 @@ namespace SnakeLaddersApi
 
         public virtual int RandomNumber()
         {
-            throw new NotImplementedException();
+            Random random = new Random();
+            return random.Next(_start, _end);
         }
     }
 }
