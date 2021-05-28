@@ -22,6 +22,17 @@ namespace SnakeLaddersGameTests
             
             Assert.Equal(new Position(4), game.TokenPosition);
         }
+
+        [Fact]
+        public void MakeToMovesWithTokenToFinalPosition()
+        {
+            var game = new Game();
+            
+            game.Move(3);
+            game.Move(4);
+            
+            Assert.Equal(new Position(8), game.TokenPosition);
+        }
     }
 
     public class Position
