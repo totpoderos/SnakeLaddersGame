@@ -74,6 +74,23 @@ namespace SnakeLaddersGameTests
             
             Assert.Contains("You get a: ", console.MessagePrinted);
         }
+
+        [Fact]
+        public void WinGame()
+        {
+            var console = new InputOutputConsoleTestDouble();
+            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
+            console.ReadWillReturn("PlaceToken");
+            gameController.ProcessCommand();
+            
+            console.ReadWillReturn("Move 99");
+            gameController.ProcessCommand();
+            
+            console.ReadWillReturn("Status");
+            gameController.ProcessCommand();
+            
+            Assert.Equal("You win the game!", console.MessagePrinted);
+        }
     }
 
     public class InputOutputConsoleTestDouble : InputOutputConsole
@@ -142,6 +159,12 @@ namespace SnakeLaddersGameTests
                 int spaces = _game.RollDice();
                 _game.Move(spaces);
                 _inputOutputConsole.Print($"You get a: {spaces}");
+            }
+            
+            if (command == "status")
+            {
+                if (_game.IsWon)
+                    _inputOutputConsole.Print("You win the game!");
             }
         }
     }
