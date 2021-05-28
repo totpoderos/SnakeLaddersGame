@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeLaddersGame", "SnakeLa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeLaddersGameTests", "SnakeLaddersGameTests\SnakeLaddersGameTests.csproj", "{5696CB14-4F1B-496F-9DFD-44DFC4FBD2D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeLaddersApi", "SnakeLaddersApi\SnakeLaddersApi.csproj", "{757D5B21-8BC8-47CA-968E-C957823C35E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{5696CB14-4F1B-496F-9DFD-44DFC4FBD2D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5696CB14-4F1B-496F-9DFD-44DFC4FBD2D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5696CB14-4F1B-496F-9DFD-44DFC4FBD2D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{757D5B21-8BC8-47CA-968E-C957823C35E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{757D5B21-8BC8-47CA-968E-C957823C35E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{757D5B21-8BC8-47CA-968E-C957823C35E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{757D5B21-8BC8-47CA-968E-C957823C35E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

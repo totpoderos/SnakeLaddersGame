@@ -1,4 +1,5 @@
 using System;
+using SnakeLaddersApi;
 using SnakeLaddersGame;
 using Xunit;
 
@@ -92,103 +93,6 @@ namespace SnakeLaddersGameTests
         public override int RandomNumber()
         {
             return _result;
-        }
-    }
-
-    public class OneToSixDice
-    {
-        private readonly RandomGenerator _randomGenerator;
-
-        public OneToSixDice(RandomGenerator randomGenerator)
-        {
-            _randomGenerator = randomGenerator;
-        }
-
-        public int Roll()
-        {
-            var number = _randomGenerator.RandomNumber();
-            if (number < 1 || number > 6) throw new Exception("Out of range dice number");
-            return number;
-        }
-    }
-
-    public class RandomGenerator
-    {
-        private readonly int _start;
-        private readonly int _end;
-
-        public RandomGenerator(int start, int end)
-        {
-            _start = start;
-            _end = end;
-        }
-
-        public virtual int RandomNumber()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class Position
-    {
-        private int _position;
-        
-        public Position(int initialPosition)
-        {
-            _position = initialPosition;
-        }
-        
-        protected bool Equals(Position other)
-        {
-            return _position == other._position;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((Position) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return _position;
-        }
-
-        public Position Increment(int spaces, int totalSpaces)
-        {
-            return _position + spaces > totalSpaces ? this : 
-                new Position(_position + spaces);
-        }
-    }
-
-    public class Game
-    {
-        private const int TotalSpaces = 100;
-        private readonly OneToSixDice _oneToSixDice;
-        private Position _position;
-
-        public Game()
-        {
-            _position = new Position(1);
-        }
-        public Game(OneToSixDice oneToSixDice) : this()
-        {
-            _oneToSixDice = oneToSixDice;
-        }
-
-        public void Move(int spaces)
-        {
-            _position = _position.Increment(spaces, TotalSpaces);
-            
-        }
-        public Position TokenPosition => _position;
-        public bool IsWon => _position.Equals(new Position(100));
-
-        public int RollDice()
-        {
-            return _oneToSixDice.Roll();
         }
     }
 }
