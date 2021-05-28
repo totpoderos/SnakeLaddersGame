@@ -1,3 +1,4 @@
+using System;
 using SnakeLaddersGame;
 using Xunit;
 
@@ -57,6 +58,75 @@ namespace SnakeLaddersGameTests
             Assert.Equal(new Position(97), game.TokenPosition);
             Assert.False(game.IsWon);
         }
+        
+        [Theory]
+        [InlineData(0)]
+        [InlineData(7)]
+        public void RaiseErrorWhenDiceRollNumberIsOutOfBounds(int diceNumber)
+        {
+            var game = new Game(new OneToSixDice(new RandomGeneratorTestDouble(1, 6, diceNumber)));
+
+            Assert.Throws<Exception>(() => game.RollDice());
+        }
+
+        [Fact]
+        public void MoveFourSpacesWhenRollinTheDice()
+        {
+            var game = new Game(new OneToSixDice(new RandomGeneratorTestDouble(1, 6, 4)));
+            
+            game.Move(game.RollDice());
+            
+            Assert.Equal(new Position(5), game.TokenPosition);
+        }
+    }
+
+    public class RandomGeneratorTestDouble : RandomGenerator
+    {
+        private readonly int _result;
+
+        public RandomGeneratorTestDouble(int start, int end, int result): base(start, end)
+        {
+            _result = result;
+        }
+
+        public override int RandomNumber()
+        {
+            return _result;
+        }
+    }
+
+    public class OneToSixDice
+    {
+        private readonly RandomGenerator _randomGenerator;
+
+        public OneToSixDice(RandomGenerator randomGenerator)
+        {
+            _randomGenerator = randomGenerator;
+        }
+
+        public int Roll()
+        {
+            var number = _randomGenerator.RandomNumber();
+            if (number < 1 || number > 6) throw new Exception("Out of range dice number");
+            return number;
+        }
+    }
+
+    public class RandomGenerator
+    {
+        private readonly int _start;
+        private readonly int _end;
+
+        public RandomGenerator(int start, int end)
+        {
+            _start = start;
+            _end = end;
+        }
+
+        public virtual int RandomNumber()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class Position
@@ -96,11 +166,16 @@ namespace SnakeLaddersGameTests
     public class Game
     {
         private const int TotalSpaces = 100;
+        private readonly OneToSixDice _oneToSixDice;
         private Position _position;
 
         public Game()
         {
             _position = new Position(1);
+        }
+        public Game(OneToSixDice oneToSixDice) : this()
+        {
+            _oneToSixDice = oneToSixDice;
         }
 
         public void Move(int spaces)
@@ -110,5 +185,10 @@ namespace SnakeLaddersGameTests
         }
         public Position TokenPosition => _position;
         public bool IsWon => _position.Equals(new Position(100));
+
+        public int RollDice()
+        {
+            return _oneToSixDice.Roll();
+        }
     }
 }
