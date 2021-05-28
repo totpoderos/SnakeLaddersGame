@@ -169,8 +169,8 @@ namespace SnakeLaddersGameTests
             
             if (input.Contains("move"))
             {
-                var spaces = input.Replace("move", "").Trim();
-                _game.Move(Int32.Parse(spaces));
+                command.Execute();
+                return;
             }
 
             if (input == "rolldice")
@@ -199,6 +199,11 @@ namespace SnakeLaddersGameTests
         {
             _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
         }
+
+        public void Move(int spaces)
+        {
+            _game.Move(spaces);
+        }
     }
 
     public abstract class Command
@@ -209,12 +214,35 @@ namespace SnakeLaddersGameTests
                 return new PlaceTokenCommand(snakeLaddersController);
             if (input == "print")
                 return new PrintCommand(snakeLaddersController);
+            
+            if (input.Contains("move"))
+            {
+                var spaces = input.Replace("move", "").Trim();
+                return new MoveCommand(snakeLaddersController, int.Parse(spaces));
+            }
             return null;
         }
 
         public virtual void Execute()
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class MoveCommand : Command
+    {
+        private readonly SnakeLaddersController _snakeLaddersController;
+        private readonly int _spaces;
+
+        public MoveCommand(SnakeLaddersController snakeLaddersController, int spaces)
+        {
+            _snakeLaddersController = snakeLaddersController;
+            _spaces = spaces;
+        }
+
+        public override void Execute()
+        {
+            _snakeLaddersController.Move(_spaces);
         }
     }
 
