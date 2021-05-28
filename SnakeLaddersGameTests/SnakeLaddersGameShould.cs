@@ -9,9 +9,8 @@ namespace SnakeLaddersGameTests
         public void MoveTokenToFirstPositionWhenGameStarts()
         {
             var game = new Game();
-            var expectedPosition = new Position(1);
-            
-            Assert.Equal(expectedPosition, game.TokenPosition);
+
+            Assert.Equal(new Position(1), game.TokenPosition);
         }
     }
 
