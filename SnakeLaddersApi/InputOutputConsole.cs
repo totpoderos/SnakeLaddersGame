@@ -6,12 +6,12 @@ namespace SnakeLaddersApi
     {
         public virtual void Print(string output)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(output);
         }
 
         public virtual string Read()
         {
-            throw new NotImplementedException();
+            return Console.ReadLine();
         }
     }
 }
