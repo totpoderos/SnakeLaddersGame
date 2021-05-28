@@ -147,11 +147,12 @@ namespace SnakeLaddersGameTests
 
         public void ProcessCommand()
         {
-            var command = _inputOutputConsole.Read().ToLower();
-            if (command == "placetoken")
+            var input = _inputOutputConsole.Read().ToLower();
+            Command command = Command.Create(input, this);
+            if (input == "placetoken")
             {
-                _tokenPlaced = true;
-                _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
+                command.Execute();
+                return;
             }
 
             if (!_tokenPlaced)
@@ -160,31 +161,67 @@ namespace SnakeLaddersGameTests
                 return;
             }
             
-            if (command == "print")
+            if (input == "print")
             {
                 _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
             }
             
-            if (command.Contains("move"))
+            if (input.Contains("move"))
             {
-                var spaces = command.Replace("move", "").Trim();
+                var spaces = input.Replace("move", "").Trim();
                 _game.Move(Int32.Parse(spaces));
             }
 
-            if (command == "rolldice")
+            if (input == "rolldice")
             {
                 int spaces = _game.RollDice();
                 _game.Move(spaces);
                 _inputOutputConsole.Print($"You get a: {spaces}");
             }
             
-            if (command == "status")
+            if (input == "status")
             {
                 if (_game.IsWon)
                     _inputOutputConsole.Print("You win the game!");
                 else 
                     _inputOutputConsole.Print("You didn't win the game");
             }
+        }
+
+        public void PlaceToken()
+        {
+            _tokenPlaced = true;
+            _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
+        }
+    }
+
+    public abstract class Command
+    {
+        public static Command Create(string input, SnakeLaddersController snakeLaddersController)
+        {
+            if (input == "placetoken")
+                return new PlaceTokenCommand(snakeLaddersController);
+            return null;
+        }
+
+        public virtual void Execute()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class PlaceTokenCommand : Command
+    {
+        private readonly SnakeLaddersController _snakeLaddersController;
+
+        public PlaceTokenCommand(SnakeLaddersController snakeLaddersController)
+        {
+            _snakeLaddersController = snakeLaddersController;
+        }
+
+        public override void Execute()
+        {
+            _snakeLaddersController.PlaceToken();
         }
     }
 
