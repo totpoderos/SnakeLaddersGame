@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using SnakeLaddersApi;
 using Xunit;
 
@@ -10,9 +9,37 @@ namespace SnakeLaddersGameTests
         [Fact]
         public void PrintInitialPositionWhenPlayerPlacesTheToken()
         {
-            var console = new InputOutputConsoleTestDouble("PlaceToken");
+            var console = new InputOutputConsoleTestDouble();
             var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
+            console.ReadWillReturn("PlaceToken");
 
+            gameController.ProcessCommand();
+            
+            Assert.Equal("Position: 1", console.MessagePrinted);
+        }        
+        
+        
+        [Fact]
+        public void ShouldNotProcessAnyCommandIfTokenIsNotPlaced()
+        {
+            var console = new InputOutputConsoleTestDouble();
+            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
+            console.ReadWillReturn("Print");
+            
+            gameController.ProcessCommand();
+            
+            Assert.Equal("Token is not placed", console.MessagePrinted);
+        }
+
+        [Fact]
+        public void PrintCurrentPosition()
+        {
+            var console = new InputOutputConsoleTestDouble();
+            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
+            console.ReadWillReturn("PlaceToken");
+            gameController.ProcessCommand();
+            console.ReadWillReturn("Print");
+            
             gameController.ProcessCommand();
             
             Assert.Equal("Position: 1", console.MessagePrinted);
@@ -21,16 +48,17 @@ namespace SnakeLaddersGameTests
 
     public class InputOutputConsoleTestDouble : InputOutputConsole
     {
-        private readonly string _input;
+        private string _input;
         private string _output;
 
-        public InputOutputConsoleTestDouble(string input)
-        {
-            _input = input;
-        }
         public override string Read()
         {
             return _input;
+        }
+
+        public void ReadWillReturn(string input)
+        {
+            _input = input;
         }
 
         public override void Print(string output)
@@ -45,6 +73,7 @@ namespace SnakeLaddersGameTests
     {
         private readonly Game _game;
         private readonly InputOutputConsole _inputOutputConsole;
+        private bool _tokenPlaced;
 
         public SnakeLaddersController(Game game, InputOutputConsole inputOutputConsole)
         {
@@ -54,9 +83,22 @@ namespace SnakeLaddersGameTests
 
         public void ProcessCommand()
         {
-            if (_inputOutputConsole.Read().ToLower() == "placetoken")
+            var command = _inputOutputConsole.Read().ToLower();
+            if (command == "placetoken")
             {
-                _inputOutputConsole.Print($"Position: {_game.TokenPosition.ToString()}");
+                _tokenPlaced = true;
+                _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
+            }
+
+            if (!_tokenPlaced)
+            {
+                _inputOutputConsole.Print("Token is not placed");
+                return;
+            }
+            
+            if (command == "print")
+            {
+                _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
             }
         }
     }
