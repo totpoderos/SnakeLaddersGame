@@ -163,7 +163,8 @@ namespace SnakeLaddersGameTests
             
             if (input == "print")
             {
-                _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
+                command.Execute();
+                return;
             }
             
             if (input.Contains("move"))
@@ -193,6 +194,11 @@ namespace SnakeLaddersGameTests
             _tokenPlaced = true;
             _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
         }
+
+        public void Print()
+        {
+            _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
+        }
     }
 
     public abstract class Command
@@ -201,12 +207,29 @@ namespace SnakeLaddersGameTests
         {
             if (input == "placetoken")
                 return new PlaceTokenCommand(snakeLaddersController);
+            if (input == "print")
+                return new PrintCommand(snakeLaddersController);
             return null;
         }
 
         public virtual void Execute()
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class PrintCommand : Command
+    {
+        private readonly SnakeLaddersController _snakeLaddersController;
+
+        public PrintCommand(SnakeLaddersController snakeLaddersController)
+        {
+            _snakeLaddersController = snakeLaddersController;
+        }
+
+        public override void Execute()
+        {
+            _snakeLaddersController.Print();
         }
     }
 
