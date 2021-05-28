@@ -6,7 +6,7 @@ namespace SnakeLaddersGameTests
     public class SnakeLaddersGameShould
     {
         [Fact]
-        public void foo()
+        public void MoveTokenToFirstPositionWhenGameStarts()
         {
             var game = new Game();
             var expectedPosition = new Position(1);
