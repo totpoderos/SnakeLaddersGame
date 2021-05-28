@@ -1,5 +1,6 @@
 using System;
 using SnakeLaddersApi;
+using SnakeLaddersApi.Domain;
 using SnakeLaddersGame;
 using Xunit;
 

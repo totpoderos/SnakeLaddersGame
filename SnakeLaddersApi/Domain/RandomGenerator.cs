@@ -1,6 +1,6 @@
 using System;
 
-namespace SnakeLaddersApi
+namespace SnakeLaddersApi.Domain
 {
     public class RandomGenerator
     {

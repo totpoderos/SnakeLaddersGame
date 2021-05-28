@@ -1,4 +1,4 @@
-namespace SnakeLaddersApi
+namespace SnakeLaddersApi.Domain
 {
     public class Game
     {
