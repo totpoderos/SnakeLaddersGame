@@ -42,8 +42,24 @@ namespace SnakeLaddersGameTests
             
             gameController.ProcessCommand();
             
-            Assert.Equal("Position: 1", console.MessagePrinted);
-        }
+                Assert.Equal("Position: 1", console.MessagePrinted);
+           }
+
+        [Fact]
+        public void ProcessMoveCommand()
+        {
+            var console = new InputOutputConsoleTestDouble();
+            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
+            console.ReadWillReturn("PlaceToken");
+            gameController.ProcessCommand();
+            console.ReadWillReturn("Move 3");
+            gameController.ProcessCommand();
+            console.ReadWillReturn("Print");
+            
+            gameController.ProcessCommand();
+            
+                Assert.Equal("Position: 4", console.MessagePrinted);
+            }
     }
 
     public class InputOutputConsoleTestDouble : InputOutputConsole
@@ -99,6 +115,12 @@ namespace SnakeLaddersGameTests
             if (command == "print")
             {
                 _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
+            }
+            
+            if (command.Contains("move"))
+            {
+                var spaces = command.Replace("move", "").Trim();
+                _game.Move(Int32.Parse(spaces));
             }
         }
     }
