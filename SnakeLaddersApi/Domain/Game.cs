@@ -18,10 +18,10 @@ namespace SnakeLaddersApi.Domain
         public void Move(int spaces)
         {
             _position = _position.Increment(spaces, TotalSpaces);
-            
         }
+        
         public Position TokenPosition => _position;
-        public bool IsWon => _position.Equals(new Position(100));
+        public bool IsWon => _position.Equals(new Position(TotalSpaces));
 
         public int RollDice()
         {

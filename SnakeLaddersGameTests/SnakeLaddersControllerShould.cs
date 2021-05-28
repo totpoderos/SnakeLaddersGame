@@ -6,107 +6,102 @@ namespace SnakeLaddersGameTests
 {
     public class SnakeLaddersControllerShould
     {
+        private readonly InputOutputConsoleTestDouble _console;
+        private readonly SnakeLaddersController _gameController;
+
+        public SnakeLaddersControllerShould()
+        {
+            _console = new InputOutputConsoleTestDouble();
+            _gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), _console);
+        }
+        
         [Fact]
         public void PrintInitialPositionWhenPlayerPlacesTheToken()
         {
-            var console = new InputOutputConsoleTestDouble();
-            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
-            console.ReadWillReturn("PlaceToken");
+            _console.ReadWillReturn("PlaceToken");
 
-            gameController.ProcessCommand();
+            _gameController.ProcessCommand();
             
-            Assert.Equal("Position: 1", console.MessagePrinted);
+            Assert.Equal("Position: 1", _console.MessagePrinted);
         }        
         
         
         [Fact]
         public void ShouldNotProcessAnyCommandIfTokenIsNotPlaced()
         {
-            var console = new InputOutputConsoleTestDouble();
-            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
-            console.ReadWillReturn("Print");
+            _console.ReadWillReturn("Print");
             
-            gameController.ProcessCommand();
+            _gameController.ProcessCommand();
             
-            Assert.Equal("Token is not placed", console.MessagePrinted);
+            Assert.Equal("Token is not placed", _console.MessagePrinted);
         }
 
         [Fact]
         public void PrintCurrentPosition()
         {
-            var console = new InputOutputConsoleTestDouble();
-            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
-            console.ReadWillReturn("PlaceToken");
-            gameController.ProcessCommand();
-            console.ReadWillReturn("Print");
+            _console.ReadWillReturn("PlaceToken");
+            _gameController.ProcessCommand();
+            _console.ReadWillReturn("Print");
             
-            gameController.ProcessCommand();
+            _gameController.ProcessCommand();
             
-            Assert.Equal("Position: 1", console.MessagePrinted);
+            Assert.Equal("Position: 1", _console.MessagePrinted);
         }
 
         [Fact]
         public void ProcessMoveCommand()
         {
-            var console = new InputOutputConsoleTestDouble();
-            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
-            console.ReadWillReturn("PlaceToken");
-            gameController.ProcessCommand();
-            console.ReadWillReturn("Move 3");
-            gameController.ProcessCommand();
-            console.ReadWillReturn("Print");
+            _console.ReadWillReturn("PlaceToken");
+            _gameController.ProcessCommand();
+            _console.ReadWillReturn("Move 3");
+            _gameController.ProcessCommand();
+            _console.ReadWillReturn("Print");
             
-            gameController.ProcessCommand();
+            _gameController.ProcessCommand();
             
-            Assert.Equal("Position: 4", console.MessagePrinted);
+            Assert.Equal("Position: 4", _console.MessagePrinted);
         }
 
         [Fact]
         public void ProcessRollDiceCommand()
         {
-            var console = new InputOutputConsoleTestDouble();
-            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
-            console.ReadWillReturn("PlaceToken");
-            gameController.ProcessCommand();
+            _console.ReadWillReturn("PlaceToken");
+            _gameController.ProcessCommand();
             
-            console.ReadWillReturn("RollDice");
-            gameController.ProcessCommand();
+            _console.ReadWillReturn("RollDice");
+            _gameController.ProcessCommand();
             
-            Assert.Contains("You get a: ", console.MessagePrinted);
+            Assert.Contains("You get a: ", _console.MessagePrinted);
         }
 
         [Fact]
         public void WinGame()
         {
-            var console = new InputOutputConsoleTestDouble();
-            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
-            console.ReadWillReturn("PlaceToken");
-            gameController.ProcessCommand();
+            _console.ReadWillReturn("PlaceToken");
+            _gameController.ProcessCommand();
             
-            console.ReadWillReturn("Move 99");
-            gameController.ProcessCommand();
+            _console.ReadWillReturn("Move 99");
+            _gameController.ProcessCommand();
             
-            console.ReadWillReturn("Status");
-            gameController.ProcessCommand();
+            _console.ReadWillReturn("Status");
+            _gameController.ProcessCommand();
             
-            Assert.Equal("You win the game!", console.MessagePrinted);
+            Assert.Equal("You win the game!", _console.MessagePrinted);
         }
 
         [Fact]
         public void PlayerHasNotWonTheGame()
         {
-            var console = new InputOutputConsoleTestDouble();
-            var gameController = new SnakeLaddersController(new Game(new OneToSixDice(new RandomGenerator(1, 6))), console);
-            console.ReadWillReturn("PlaceToken");
-            gameController.ProcessCommand();
+            _console.ReadWillReturn("PlaceToken");
+            _gameController.ProcessCommand();
             
-            console.ReadWillReturn("Move 2");
-            gameController.ProcessCommand();
+            _console.ReadWillReturn("Move 2");
+            _gameController.ProcessCommand();
             
-            console.ReadWillReturn("Status");
-            gameController.ProcessCommand();
+            _console.ReadWillReturn("Status");
+            _gameController.ProcessCommand();
             
-            Assert.Equal("You didn't win the game", console.MessagePrinted);
+            Assert.Equal("You didn't win the game", _console.MessagePrinted);
         }
     }
 
