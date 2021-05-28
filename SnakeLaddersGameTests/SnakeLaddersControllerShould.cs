@@ -149,43 +149,8 @@ namespace SnakeLaddersGameTests
         {
             var input = _inputOutputConsole.Read().ToLower();
             Command command = Command.Create(input, this);
-            if (input == "placetoken")
-            {
-                command.Execute();
-                return;
-            }
-
-            if (!_tokenPlaced)
-            {
-                _inputOutputConsole.Print("Token is not placed");
-                return;
-            }
-            
-            if (input == "print")
-            {
-                command.Execute();
-                return;
-            }
-            
-            if (input.Contains("move"))
-            {
-                command.Execute();
-                return;
-            }
-
-            if (input == "rolldice")
-            {
-                command.Execute();
-                return;
-            }
-            
-            if (input == "status")
-            {
-                if (_game.IsWon)
-                    _inputOutputConsole.Print("You win the game!");
-                else 
-                    _inputOutputConsole.Print("You didn't win the game");
-            }
+            command.Execute();
+            if(!_tokenPlaced) _inputOutputConsole.Print("Token is not placed");
         }
 
         public void PlaceToken()
@@ -196,19 +161,31 @@ namespace SnakeLaddersGameTests
 
         public void Print()
         {
+            if (!_tokenPlaced) return;
             _inputOutputConsole.Print($"Position: {_game.TokenPosition}");
         }
 
         public void Move(int spaces)
         {
+            if (!_tokenPlaced) return;
             _game.Move(spaces);
         }
 
         public void RollDice()
         {
+            if (!_tokenPlaced) return;
             int spaces = _game.RollDice();
             _game.Move(spaces);
             _inputOutputConsole.Print($"You get a: {spaces}");
+        }
+
+        public void Status()
+        {
+            if (!_tokenPlaced) return;
+            if (_game.IsWon)
+                _inputOutputConsole.Print("You win the game!");
+            else 
+                _inputOutputConsole.Print("You didn't win the game");
         }
     }
 
@@ -231,12 +208,30 @@ namespace SnakeLaddersGameTests
             {
                 return new RollDiceCommand(snakeLaddersController);
             }
+
+            if (input == "status")
+            {
+                return new StatusCommand(snakeLaddersController);
+            }
+
             return null;
         }
 
-        public virtual void Execute()
+        public virtual void Execute() { }
+    }
+
+    public class StatusCommand : Command
+    {
+        private readonly SnakeLaddersController _snakeLaddersController;
+
+        public StatusCommand(SnakeLaddersController snakeLaddersController)
         {
-            throw new NotImplementedException();
+            _snakeLaddersController = snakeLaddersController;
+        }
+
+        public override void Execute()
+        {
+            _snakeLaddersController.Status();
         }
     }
 
